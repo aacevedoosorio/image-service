@@ -1,0 +1,41 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+        scalaVersion = '2.11.2'
+        scalaLibVersion = '2.11'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'scala'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.acevedo.images.ImageApplication'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("org.scala-lang:scala-library:$scalaVersion")
+    compile("org.scala-lang:scala-reflect:$scalaVersion")
+    compile("com.sksamuel.scrimage:scrimage-core_2.10:2.1.6")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
